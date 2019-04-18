@@ -10,13 +10,13 @@ Release notes are [here](docs/Releases.md).
 
 ### Technologies
 
-* Java 7 for the core modules, Java 8 for everything else
+* Java 7 for the core modules, Java 8 for everything else (also compiles and runs under JRE/JDK 11 or 12)
 * [Maven 3+](http://maven.apache.org) - for building the project
 * [Google Protocol Buffers](https://github.com/google/protobuf) - for use with serialization and hardware communications
 
 ### Getting started
 
-To get started, it is best to have the latest JDK and Maven installed. The HEAD of the `master` branch contains the latest development code and various production releases are provided on feature branches.
+To get started, it is best to have the latest JDK and Maven installed.
 
 #### Building from the command line
 
@@ -35,6 +35,8 @@ The outputs are under the `target` directory.
 #### Building from an IDE
 
 Alternatively, just import the project using your IDE. [IntelliJ](http://www.jetbrains.com/idea/download/) has Maven integration built-in and has a free Community Edition. Simply use `File | Import Project` and locate the `pom.xml` in the root of the cloned project source tree.
+
+If using JDK 11 or above, the WalletTemplate demo you will JavaFX-SDK installed and referenced seperately. In IntelliJ, add javafx-lib path to File > Project Structure > Libraries. Under Run > Edit Configurations, add '--module-path "PATH_TO_FX" --add-modules=javafx.controls,javafx.fxml' to VM options. Replace PATH_TO_FX with javafx lib path, leaving the quotations.
 
 ### Example applications
 
