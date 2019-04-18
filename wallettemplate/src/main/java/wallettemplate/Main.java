@@ -30,6 +30,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.bitcoinj.wallet.UnreadableWalletException;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.utils.GuiUtils;
 import wallettemplate.utils.TextFieldValidator;
@@ -42,6 +43,7 @@ import java.net.URL;
 import static wallettemplate.utils.GuiUtils.*;
 
 public class Main extends Application {
+    private boolean USE_TEST_WALLET = true;
     public static NetworkParameters params = MainNetParams.get();
     public static final String APP_NAME = "WalletTemplate";
     private static final String WALLET_FILE_NAME = APP_NAME.replaceAll("[^a-zA-Z0-9.-]", "_") + "-"
@@ -59,14 +61,14 @@ public class Main extends Application {
     @Override
     public void start(Stage mainWindow) throws Exception {
         try {
-            realStart(mainWindow);
+            realStart(mainWindow, USE_TEST_WALLET);
         } catch (Throwable e) {
             GuiUtils.crashAlert(e);
             throw e;
         }
     }
 
-    private void realStart(Stage mainWindow) throws IOException {
+    private void realStart(Stage mainWindow, boolean useTestWallet) throws IOException {
         this.mainWindow = mainWindow;
         instance = this;
         // Show the crash dialog for any exceptions that we don't handle and that hit the main loop.
@@ -103,8 +105,17 @@ public class Main extends Application {
         // we give to the app kit is currently an exception and runs on a library thread. It'll get fixed in
         // a future version.
         Threading.USER_THREAD = Platform::runLater;
+
         // Create the app kit. It won't do any heavyweight initialization until after we start it.
-        setupWalletKit(null);
+        // Use test wallet? (published for CTOR validation branch at https://github.com/pokkst/bitcoinj-cash)
+        if (useTestWallet)
+            try {
+                setupWalletKit(new DeterministicSeed("era illness this crowd path elegant web critic inject orient miracle melt", null, "", 1544227200L));
+            } catch (UnreadableWalletException e) {
+                e.printStackTrace();
+            }
+        else
+            setupWalletKit(null);
 
         if (bitcoin.isChainFileLocked()) {
             informationalAlert("Already running", "This application is already running and cannot be started twice.");

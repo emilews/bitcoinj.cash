@@ -1907,9 +1907,10 @@ public class Wallet extends BaseTaggableObject
         Coin valueSentToMe = tx.getValueSentToMe(this);
         Coin valueDifference = valueSentToMe.subtract(valueSentFromMe);
 
-        log.info("Received tx{} for {}: {} [{}] in block {}", sideChain ? " on a side chain" : "",
-                valueDifference.toFriendlyString(), tx.getHashAsString(), relativityOffset,
-                block != null ? block.getHeader().getHash() : "(unit test)");
+        log.info("Received tx{} with balance effect: spent {} received {} total {} : {} [{}] in block {}",
+                sideChain ? " on a side chain" : "", valueSentFromMe.toFriendlyString(),
+                valueSentToMe.toFriendlyString(), valueDifference.toFriendlyString(), tx.getHashAsString(),
+                relativityOffset, block != null ? block.getHeader().getHash() : "(unit test)");
 
         // Inform the key chains that the issued keys were observed in a transaction, so they know to
         // calculate more keys for the next Bloom filters.
