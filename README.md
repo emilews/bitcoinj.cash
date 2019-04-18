@@ -1,11 +1,6 @@
 [![Build Status](https://travis-ci.org/bitcoinj-cash/bitcoinj.png?branch=cash-0.14)](https://travis-ci.org/bitcoinj-cash/bitcoinj)   [![Coverage Status](https://coveralls.io/repos/github/bitcoinj-cash/bitcoinj/badge.svg?branch=cash-0.14)](https://coveralls.io/github/bitcoinj-cash/bitcoinj?branch=cash-0.14) [![Javadocs](http://www.javadoc.io/badge/cash.bitcoinj/bitcoinj-core.svg)](http://www.javadoc.io/doc/cash.bitcoinj/bitcoinj-core) 
 
-### NOTICE
-The bitcoinj.cash library will be following the Bitcoin SV chain. The following changes will take place:
-
-* a minor update, including released jar, to update DNS seeds to point to Bitcoin SV DNS seeds
-* rebranding to bitcoinj-sv version 0.9.0
-* work will start on bitcoinj-sv version 1.0.0, which will make significant changes to the API
+### Welcome to bitcoinj
 
 ### Welcome to bitcoinj.cash
 
