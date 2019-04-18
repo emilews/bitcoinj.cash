@@ -1,7 +1,3 @@
-[![Build Status](https://travis-ci.org/bitcoinj-cash/bitcoinj.png?branch=cash-0.14)](https://travis-ci.org/bitcoinj-cash/bitcoinj)   [![Coverage Status](https://coveralls.io/repos/github/bitcoinj-cash/bitcoinj/badge.svg?branch=cash-0.14)](https://coveralls.io/github/bitcoinj-cash/bitcoinj?branch=cash-0.14) [![Javadocs](http://www.javadoc.io/badge/cash.bitcoinj/bitcoinj-core.svg)](http://www.javadoc.io/doc/cash.bitcoinj/bitcoinj-core) 
-
-### Welcome to bitcoinj
-
 ### Welcome to bitcoinj.cash
 
 The bitcoinj.cash library is a Java implementation of the Bitcoin cash protocol. This library is a fork of Mike Hearn's original bitcoinj library aimed at supporting the Bitcoin cash eco-system.
@@ -58,18 +54,6 @@ If you send coins to that address, it will forward them on to the address you sp
 Note that this example app *does not use checkpointing*, so the initial chain sync will be pretty slow. You can make an app that starts up and does the initial sync much faster by including a checkpoints file; see the documentation for
 more info on this technique.
 
-### Where next?
-
-Now you are ready to [follow the tutorial](https://bitcoinj.github.io/getting-started).
-
 ### Contributing to Bitcoinj Cash
 
 Contributions to Bitcoinj Cash are welcome and encouraged.
-
-* the development branch is `cash` 
-* release branches are named `cash-<version>`
-* Travis-CI is [here](https://travis-ci.org/bitcoinj-cash/bitcoinj)
-* Coveralls test coverage report is [here](https://coveralls.io/github/bitcoinj-cash/bitcoinj)
-
-The project's BCH donation address is: 1M6GwE9ddu8S6tvYE1qbAnqeG3CM1UaVvP
-Do NOT send BTC to this address, only BCH! Any funds donated will be used for bug or feature bounties.
