@@ -43,8 +43,8 @@ import java.net.URL;
 import static wallettemplate.utils.GuiUtils.*;
 
 public class Main extends Application {
-    private boolean USE_TEST_WALLET = true;
-    public static NetworkParameters params = MainNetParams.get();
+    private boolean USE_TEST_WALLET = false;
+    public static NetworkParameters params = TestNet3Params.get();
     public static final String APP_NAME = "WalletTemplate";
     private static final String WALLET_FILE_NAME = APP_NAME.replaceAll("[^a-zA-Z0-9.-]", "_") + "-"
             + params.getPaymentProtocolId();
@@ -155,7 +155,7 @@ public class Main extends Application {
             bitcoin.connectToLocalHost();   // You should run a regtest mode bitcoind locally.
         } else if (params == TestNet3Params.get()) {
             // As an example!
-            bitcoin.useTor();
+            //bitcoin.useTor();
             // bitcoin.setDiscovery(new HttpDiscovery(params, URI.create("http://localhost:8080/peers"), ECKey.fromPublicOnly(BaseEncoding.base16().decode("02cba68cfd0679d10b186288b75a59f9132b1b3e222f6332717cb8c4eb2040f940".toUpperCase()))));
         }
         bitcoin.setDownloadListener(controller.progressBarUpdater())

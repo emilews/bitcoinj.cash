@@ -23,8 +23,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.math.BigInteger;
 import java.util.Date;
 
+import com.subgraph.orchid.data.exitpolicy.Network;
 import org.bitcoin.protocols.payments.Protos.PaymentDetails;
 import org.bitcoinj.core.*;
+import org.bitcoinj.net.NetHelper;
+import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
 import org.bitcoinj.utils.ExchangeRate;
@@ -151,11 +154,30 @@ public class SendRequest {
      * <p>Be very careful when value is smaller than {@link Transaction#MIN_NONDUST_OUTPUT} as the transaction will
      * likely be rejected by the network in this case.</p>
      */
-    public static SendRequest to(Address destination, Coin value) {
+    public static SendRequest to(NetworkParameters params, String recipient, Coin value) {
+        NetHelper netHelper = new NetHelper();
+
         SendRequest req = new SendRequest();
-        final NetworkParameters parameters = destination.getParameters();
-        checkNotNull(parameters, "Address is for an unknown network");
-        req.tx = new Transaction(parameters);
+        Address destination = null;
+
+        if(recipient.contains("#"))
+        {
+            String cashAcctAddress = netHelper.getCashAccountAddress(recipient);
+            if(cashAcctAddress.startsWith(params.getCashAddrPrefix()) || cashAcctAddress.startsWith("q") || cashAcctAddress.startsWith("p")) {
+                destination = AddressFactory.create().getAddress(params, cashAcctAddress);
+            } else {
+                destination = Address.fromBase58(params, cashAcctAddress);
+            }
+        } else {
+            if(recipient.startsWith(params.getCashAddrPrefix()) || recipient.startsWith("p") || recipient.startsWith("q")) {
+                destination = AddressFactory.create().getAddress(params, recipient);
+            } else {
+                destination = Address.fromBase58(params, recipient);
+            }
+        }
+
+        checkNotNull(params, "Address is for an unknown network");
+        req.tx = new Transaction(params);
         req.tx.addOutput(value, destination);
         return req;
     }
@@ -165,7 +187,7 @@ public class SendRequest {
      *
      * <p>Be careful to check the output's value is reasonable using
      * {@link TransactionOutput#getMinNonDustValue(Coin)} afterwards or you risk having the transaction
-     * rejected by the network. Note that using {@link SendRequest#to(Address, Coin)} will result
+     * rejected by the network. Note that using SendRequest.to(NetworkParameters, String, Coin) will result
      * in a smaller output, and thus the ability to use a smaller output value without rejection.</p>
      */
     public static SendRequest to(NetworkParameters params, ECKey destination, Coin value) {
@@ -182,11 +204,34 @@ public class SendRequest {
         return req;
     }
 
-    public static SendRequest emptyWallet(Address destination) {
+    public static SendRequest emptyWallet(NetworkParameters params, String recipient) {
+        NetHelper netHelper = new NetHelper();
+
         SendRequest req = new SendRequest();
-        final NetworkParameters parameters = destination.getParameters();
-        checkNotNull(parameters, "Address is for an unknown network");
-        req.tx = new Transaction(parameters);
+        Address destination = null;
+
+        if(recipient.contains("#"))
+        {
+            String cashAcctAddress = netHelper.getCashAccountAddress(recipient);
+            cashAcctAddress = cashAcctAddress.replace(params == MainNetParams.get() ? "bitcoincash:" : "bchtest:", "");
+
+            if(cashAcctAddress.startsWith("q") || cashAcctAddress.startsWith("p")) {
+                destination = AddressFactory.create().getAddress(params, cashAcctAddress);
+            } else {
+                destination = Address.fromBase58(params, cashAcctAddress);
+            }
+        } else {
+            recipient = recipient.replace(params == MainNetParams.get() ? "bitcoincash:" : "bchtest:", "");
+
+            if(recipient.startsWith("q") || recipient.startsWith("p")) {
+                destination = AddressFactory.create().getAddress(params, recipient);
+            } else {
+                destination = Address.fromBase58(params, recipient);
+            }
+        }
+
+        checkNotNull(params, "Address is for an unknown network");
+        req.tx = new Transaction(params);
         req.tx.addOutput(Coin.ZERO, destination);
         req.emptyWallet = true;
         return req;
