@@ -92,8 +92,64 @@ public class Address extends VersionedChecksummedBytes {
      * @throws WrongNetworkException
      *             if the given address is valid but for a different chain (eg testnet vs mainnet)
      */
+    @Deprecated
     public static Address fromBase58(@Nullable NetworkParameters params, String base58) throws AddressFormatException {
         return new Address(params, base58);
+    }
+
+    /**
+     * Construct an address from its Base58 representation.
+     * @param params
+     *            The expected NetworkParameters or null if you don't want validation.
+     * @param cashAddress
+     *            The textual form of the address, such as "17kzeh4N8g49GFvdDzSf8PjaPfyoD1MndL".
+     * @throws AddressFormatException
+     *             if the given cashaddr doesn't parse or the checksum is invalid
+     */
+    public static Address fromCashAddr(@Nullable NetworkParameters params, String cashAddress) throws AddressFormatException {
+        CashAddressFactory addrFactory = CashAddressFactory.create();
+        return addrFactory.getFromFormattedAddress(params, cashAddress);
+    }
+
+    /**
+     *
+     * @param params
+     *             The expected NetworkParameters to validate the address against.
+     * @param legacyAddress
+     *             The Bitcoin Cash legacy address. Starts with a "1"
+     * @return
+     *             Whether the address is valid or not.
+     */
+    @Deprecated
+    public static boolean isValidLegacyAddress(NetworkParameters params, String legacyAddress)
+    {
+        try {
+            Address.fromBase58(params, legacyAddress);
+            return true;
+        } catch(AddressFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param params
+     *             The expected NetworkParameters to validate the address against.
+     * @param cashaddr
+     *             The Bitcoin Cash cash address. Starts with a "q", "p", or "bitcoincash:"
+     * @return
+     *             Whether the address is valid or not.
+     */
+    public static boolean isValidCashAddr(NetworkParameters params, String cashaddr)
+    {
+        try {
+            Address.fromCashAddr(params, cashaddr);
+            return true;
+        } catch(AddressFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**

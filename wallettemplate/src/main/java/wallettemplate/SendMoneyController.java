@@ -100,6 +100,8 @@ public class SendMoneyController {
             overlayUI.done();
         } catch (ECKey.KeyIsEncryptedException e) {
             askForPasswordAndRetry();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
