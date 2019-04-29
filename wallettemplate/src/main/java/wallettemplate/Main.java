@@ -19,6 +19,7 @@ import javafx.scene.input.*;
 import okio.ByteString;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.kits.WalletAppKit;
+import org.bitcoinj.net.NetHelper;
 import org.bitcoinj.params.*;
 import org.bitcoinj.utils.BriefLogFormatter;
 import org.bitcoinj.utils.Threading;

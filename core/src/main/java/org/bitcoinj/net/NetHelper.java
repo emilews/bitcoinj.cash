@@ -18,6 +18,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Random;
 
 public class NetHelper {
@@ -53,9 +55,9 @@ public class NetHelper {
             block = splitAccount[1];
         }
         String txHex = getTxHexFromCashAcct(cashAccount);
-        Transaction decodedTxHex = new Transaction(params, Hex.decode(txHex));
+        Transaction decodedTx = new Transaction(params, Hex.decode(txHex));
 
-        String txid = decodedTxHex.getHashAsString();
+        String txid = decodedTx.getHashAsString();
         int txHeight = getTransactionHeight(txid);
         int blockInt = Integer.parseInt(block);
         int cashAccountGenesis = 563620;
@@ -63,8 +65,8 @@ public class NetHelper {
             String blockHash = getTransactionsBlockHash(txid);
             String collision = new HashHelper().getCashAccountCollision(blockHash, txid);
             String expectedAddress = getExpectedCashAccountAddress(username + "#" + block + "." + collision);
-            String opReturn = getTransactionOpReturn(txid);
-            String hash160 = opReturn.substring(opReturn.length() - 40);
+            String opReturn = getOpReturn(decodedTx);
+            String hash160 = opReturn.substring(2);
             String cashAddress = CashAddressFactory.create().getFromBase58(MainNetParams.get(), new Address(params, Hex.decode(hash160)).toString()).toString();
 
             if(cashAddress.equals(expectedAddress))
@@ -186,34 +188,15 @@ public class NetHelper {
         return txHex;
     }
 
-    private String getTransactionOpReturn(String transactionHash)
+    private String getOpReturn(Transaction tx)
     {
-        String blockExplorerURL = "https://bch.coin.space/api/tx/";
+        boolean isOpReturn = tx.getOutputs().get(0).getScriptPubKey().isOpReturn();
+        String opReturn = null;
 
-        String opReturn = "";
-        String txHash = transactionHash.toLowerCase();
-        InputStream is = null;
-        try {
-            is = new URL(blockExplorerURL + txHash).openStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = JSONHelper.readJSONFile(rd);
-            JSONObject json = new JSONObject(jsonText);
-            opReturn = json.getJSONArray("vout").getJSONObject(0).getJSONObject("scriptPubKey").getString("asm");
-
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if(isOpReturn) {
+            opReturn = new String(Hex.encode(Objects.requireNonNull(tx.getOutputs().get(0).getScriptPubKey().getChunks().get(3).data)), StandardCharsets.UTF_8);
+        } else {
+            opReturn = "not.op_return";
         }
 
         return opReturn;
