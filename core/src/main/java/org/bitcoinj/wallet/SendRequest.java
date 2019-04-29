@@ -153,9 +153,6 @@ public class SendRequest {
      *
      * <p>Be very careful when value is smaller than {@link Transaction#MIN_NONDUST_OUTPUT} as the transaction will
      * likely be rejected by the network in this case.</p>
-     *
-     * @throws NullPointerException
-     *                     Thrown when a Cash Account is not found on a lookup server.
      */
     public static SendRequest to(NetworkParameters params, String recipient, Coin value) throws NullPointerException, AddressFormatException {
         NetHelper netHelper = new NetHelper();
@@ -165,7 +162,7 @@ public class SendRequest {
 
         if(recipient.contains("#"))
         {
-            String cashAcctAddress = netHelper.getCashAccountAddress(recipient);
+            String cashAcctAddress = netHelper.getCashAccountAddress(params, recipient);
             if(Address.isValidCashAddr(params, cashAcctAddress)) {
                 destination = Address.fromCashAddr(params, cashAcctAddress);
             } else if(Address.isValidLegacyAddress(params, cashAcctAddress)){
@@ -216,7 +213,7 @@ public class SendRequest {
 
         if(recipient.contains("#"))
         {
-            String cashAcctAddress = netHelper.getCashAccountAddress(recipient);
+            String cashAcctAddress = netHelper.getCashAccountAddress(params, recipient);
             if(Address.isValidCashAddr(params, cashAcctAddress)) {
                 destination = Address.fromCashAddr(params, cashAcctAddress);
             } else if(Address.isValidLegacyAddress(params, cashAcctAddress)){
