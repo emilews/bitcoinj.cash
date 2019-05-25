@@ -700,18 +700,27 @@ public abstract class AbstractBlockChain {
             checkNotNull(filteredTxn);
             // not the prettiest sorter, but it is very fast in most cases ever encountered here
             List<Sha256Hash> orderedTxHashList = new ArrayList<>(filteredTxHashList);
-            for (Sha256Hash hash : filteredTxHashList) {
-                Transaction tx = filteredTxn.get(hash);
-                if (tx != null)
-                    for (TransactionInput input : tx.getInputs()) {
-                        Sha256Hash inputTx = input.getOutpoint().getHash();
-                        // does this transaction's input depend on a transaction in our list?
-                        if (filteredTxHashList.contains(inputTx)) {
-                            // yes; so, remove the parent and add it to the top of the list
-                            orderedTxHashList.remove(inputTx);
-                            orderedTxHashList.add(0, inputTx);
+            for (int i = 0; i < filteredTxHashList.size(); i++) {
+                Sha256Hash childHash = filteredTxHashList.get(i);
+                Transaction childTx = filteredTxn.get(childHash);
+                if (childTx == null)
+                    continue;
+
+                for (TransactionInput input : childTx.getInputs()) {
+                    Sha256Hash parentHash = input.getOutpoint().getHash();
+                    // does this transaction's input depend on a transaction in our list?
+                    if (filteredTxHashList.contains(parentHash)) {
+                        // yes; so, does the parent need to be moved above the child?
+                        int childIndex = orderedTxHashList.indexOf(childHash);
+                        if (childIndex < orderedTxHashList.indexOf(parentHash)) {
+                            // yes; so, remove the parent and place it directly above the child
+                            orderedTxHashList.remove(parentHash);
+                            orderedTxHashList.add(childIndex, parentHash);
+                            // step back one array element for the next loop, checking this parent is checked for a parent
+                            i--;
                         }
                     }
+                }
             }
             // all transactions now have their parents above them
             filteredTxHashList = orderedTxHashList;

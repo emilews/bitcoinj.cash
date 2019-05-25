@@ -1930,6 +1930,13 @@ public class Script {
             if (!castToBool(p2shStack.pollLast()))
                 throw new ScriptException("P2SH script execution resulted in a non-true stack");
         }
+
+        // The CLEANSTACK check is only performed after potential P2SH evaluation,
+        // as the non-P2SH evaluation of a P2SH script will obviously not result in
+        // a clean stack (the P2SH inputs remain).
+        if (verifyFlags.contains(VerifyFlag.CLEANSTACK) && verifyFlags.contains(VerifyFlag.P2SH))
+            if (stack.size() != 1)
+                throw new ScriptException("CleanStack check failed. Stack size is not 1.");
     }
 
     // Utility that doesn't copy for internal use

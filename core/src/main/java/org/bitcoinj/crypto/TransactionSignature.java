@@ -222,4 +222,12 @@ public class TransactionSignature extends ECKey.ECDSASignature {
         // isEncodingCanonical to learn more about this. So we must store the exact byte found.
         return new TransactionSignature(sig.r, sig.s, bytes[bytes.length - 1]);
     }
+
+    public static boolean isValidHashType(byte[] signature) {
+        boolean result = true;
+        int hashType = (signature[signature.length-1] & 0xff) & ~(Transaction.SigHash.ANYONECANPAY.value| SigHash.FORKID.value); // mask the byte to prevent sign-extension hurting us
+        if (hashType < Transaction.SigHash.ALL.value || hashType > Transaction.SigHash.SINGLE.value)
+            result = false;
+        return result;
+    }
 }
