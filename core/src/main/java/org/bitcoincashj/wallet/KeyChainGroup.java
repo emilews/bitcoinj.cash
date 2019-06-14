@@ -83,6 +83,10 @@ public class KeyChainGroup implements KeyBag {
     public KeyChainGroup(NetworkParameters params, DeterministicSeed seed) {
         this(params, null, ImmutableList.of(new DeterministicKeyChain(seed)), null, null);
     }
+    /** Creates a keychain group with no basic chain, and a chain that is given. */
+    public KeyChainGroup(NetworkParameters params, DeterministicKeyChain chain) {
+        this(params, (BasicKeyChain)null, ImmutableList.of(chain), (EnumMap)null, (KeyCrypter)null);
+    }
 
     /**
      * Creates a keychain group with no basic chain, and an HD chain that is watching the given watching key.
