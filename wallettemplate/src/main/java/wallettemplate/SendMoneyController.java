@@ -15,9 +15,9 @@
 package wallettemplate;
 
 import javafx.scene.layout.HBox;
-import org.bitcoinj.core.*;
-import org.bitcoinj.wallet.SendRequest;
-import org.bitcoinj.wallet.Wallet;
+import org.bitcoincashj.core.*;
+import org.bitcoincashj.wallet.SendRequest;
+import org.bitcoincashj.wallet.Wallet;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -26,7 +26,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.spongycastle.crypto.params.KeyParameter;
-import wallettemplate.controls.BitcoinAddressValidator;
 import wallettemplate.utils.TextFieldValidator;
 import wallettemplate.utils.WTUtils;
 

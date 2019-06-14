@@ -16,14 +16,12 @@ package wallettemplate;
 
 import com.google.common.util.concurrent.*;
 import javafx.scene.input.*;
-import okio.ByteString;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.kits.WalletAppKit;
-import org.bitcoinj.net.NetHelper;
-import org.bitcoinj.params.*;
-import org.bitcoinj.utils.BriefLogFormatter;
-import org.bitcoinj.utils.Threading;
-import org.bitcoinj.wallet.DeterministicSeed;
+import org.bitcoincashj.core.NetworkParameters;
+import org.bitcoincashj.kits.WalletAppKit;
+import org.bitcoincashj.params.*;
+import org.bitcoincashj.utils.BriefLogFormatter;
+import org.bitcoincashj.utils.Threading;
+import org.bitcoincashj.wallet.DeterministicSeed;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +30,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.bitcoinj.wallet.UnreadableWalletException;
+import org.bitcoincashj.wallet.UnreadableWalletException;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.utils.GuiUtils;
 import wallettemplate.utils.TextFieldValidator;
@@ -41,7 +39,6 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
 import static wallettemplate.utils.GuiUtils.*;
 
