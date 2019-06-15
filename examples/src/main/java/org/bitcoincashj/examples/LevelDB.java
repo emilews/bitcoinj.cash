@@ -30,7 +30,7 @@ public class LevelDB {
          * 390000 then exit.
          */
         FullPrunedBlockStore store = new LevelDBFullPrunedBlockStore(
-                MainNetParams.get(), args[0], 1000, 100 * 1024 * 1024l,
+                MainNetParams.get(), "TEST", 1000, 100 * 1024 * 1024l,
                 10 * 1024 * 1024, 100000, true, 390000);
 
         FullPrunedBlockChain vChain = new FullPrunedBlockChain(

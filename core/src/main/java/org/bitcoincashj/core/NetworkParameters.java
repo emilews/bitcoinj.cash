@@ -562,9 +562,11 @@ public abstract class NetworkParameters {
         MINIMUM(70000),
         PONG(60001),
         //Updated 13/06/2019 (dd/mm/yyyy)
-        BLOOM_FILTER(70011),
+        //Reverted 14/06/2019(dd/mm/yyyy)
+        BLOOM_FILTER(70000),
         //Updated 13/06/2019 (dd/mm/yyyy)
-        CURRENT(70015);
+        //Reverted 14/06/2019(dd/mm/yyyy)
+        CURRENT(70013);
 
         private final int bitcoinProtocol;
 
